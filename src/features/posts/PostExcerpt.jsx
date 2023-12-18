@@ -3,8 +3,12 @@ import TimeAgo from './TimeAgo';
 import ReactionButtons from "./ReactionButtons";
 import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
+import { selectPostById } from "./postsSlice";
+import { useSelector } from "react-redux";
 
-const PostExcerpt = ({ post }) => {
+const PostExcerpt = ({ postId }) => {
+
+    const post = useSelector(state => selectPostById(state, postId));
 
     return (
         <article className="post">
@@ -21,7 +25,7 @@ const PostExcerpt = ({ post }) => {
 }
 
 PostExcerpt.propTypes = {
-    post: PropTypes.object.isRequired
+    postId: PropTypes.string.isRequired
 }
 
 export default PostExcerpt

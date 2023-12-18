@@ -1,13 +1,22 @@
-import { createSlice, nanoid, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
+import {
+    createSlice,
+    nanoid,
+    createAsyncThunk,
+    createSelector,
+    createEntityAdapter
+} from "@reduxjs/toolkit";
 import axios from "axios";
 import { sub } from "date-fns";
 const POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
 
-const initialState = {
-    posts: [],
+const postAdapter = createEntityAdapter({
+    sortComparer: (a, b) => b.date.localeCompare(a.date)
+});
+
+const initialState = postAdapter.getInitialState({
     status: "idle", // "idle" | "loading" | "succeeded" | "failed"
     error: null
-}
+});
 
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
     try {
@@ -76,7 +85,7 @@ export const postsSlice = createSlice({
         },
         reactionAdded(state, action) {
             const { postId, reaction } = action.payload;
-            const existingPost = state.posts.find(post => post.id === postId);
+            const existingPost = state.entities[postId];
             if (existingPost) {
                 existingPost.reactions[reaction]++;
             }
@@ -101,7 +110,7 @@ export const postsSlice = createSlice({
                     }
                     return post;
                 });
-                state.posts = state.posts.concat(loadedPosts);
+                postAdapter.upsertMany(state, loadedPosts);
             })
             .addCase(fetchPosts.rejected, (state, action) => {
                 state.status = "failed";
@@ -118,7 +127,7 @@ export const postsSlice = createSlice({
                     rocket: 0,
                     eyes: 0
                 }
-                state.posts.push(action.payload);
+                postAdapter.addOne(state, action.payload);
             })
             .addCase(updatePost.fulfilled, (state, action) => {
                 if (!action.payload?.id) {
@@ -126,10 +135,8 @@ export const postsSlice = createSlice({
                     console.log(action.payload)
                     return;
                 }
-                const { id } = action.payload;
                 action.payload.date = new Date().toISOString();
-                const posts = state.posts.filter(post => post.id !== id);
-                state.posts = [...posts, action.payload];
+                postAdapter.upsertOne(state, action.payload);
             })
             .addCase(deletePostById.fulfilled, (state, action) => {
                 if (!action.payload?.id) {
@@ -138,16 +145,20 @@ export const postsSlice = createSlice({
                     return;
                 }
                 const { postId } = action.payload;
-                state.posts = state.posts.filter(post => post.id !== postId);
+                postAdapter.removeOne(state, postId);
             });
     }
 })
 
-export const selectAllPosts = (state) => state.posts.posts;
+// getSelectors creates these selectors and we rename them with aliases using ES6 destructuring
+export const {
+    selectAll: selectAllPosts,
+    selectById: selectPostById,
+    selectIds: selectPostIds
+} = postAdapter.getSelectors(state => state.posts);
+
 export const getPostStatus = (state) => state.posts.status;
 export const getPostError = (state) => state.posts.error;
-
-export const selectPostById = (state, postId) => state.posts.posts.find(post => post.id === Number(postId));
 
 export const selectPostsByUserId = createSelector(
     [selectAllPosts, (state, userId) => userId],
