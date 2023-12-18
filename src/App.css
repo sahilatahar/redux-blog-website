@@ -1,0 +1,178 @@
+:root {
+  --accent-color: #B15EFF;
+}
+
+section {
+  padding: 2rem;
+}
+
+/* Header */
+.Header {
+  background-color: var(--accent-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5rem 2rem;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
+
+.Header h1 {
+  font-size: 1.5rem;
+}
+
+.Header ul {
+  display: flex;
+  gap: 2rem;
+  list-style-type: none;
+}
+
+.Header a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.PostAddForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.PostAddForm form {
+  width: min(90%, 500px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.input-group label {
+  font-size: .9rem;
+  font-weight: 500;
+}
+
+input,
+textarea,
+select,
+button {
+  padding: .5rem;
+  border-radius: 5px;
+  border: 2px solid #c4c4c4;
+  outline: none;
+}
+
+.input-group textarea {
+  resize: none;
+  height: 150px;
+}
+
+button {
+  cursor: pointer;
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+button.danger {
+  background-color: #EF4040;
+}
+
+.PostsList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.PostsList>h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.posts {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  align-items: self-start;
+}
+
+.post {
+  padding: 1rem;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.ReactionButtons {
+  display: flex;
+  gap: .5rem;
+}
+
+.ReactionButtons>button {
+  align-self: flex-end;
+  padding: .5rem;
+  border-radius: 5px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #000;
+}
+
+.post h3 {
+  font-size: 1.2rem;
+}
+
+.post p {
+  font-size: 1rem;
+}
+
+.postCredit {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  font-size: .8rem;
+}
+
+.btn-accent {
+  border-radius: 5px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.SinglePostPage {
+  width: 100%;
+  padding: 2rem;
+}
+
+.SinglePostPage article {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* User page */
+.UserPage>h2 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
